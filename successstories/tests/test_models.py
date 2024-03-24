@@ -15,8 +15,9 @@ class StoryModelTests(TestCase):
         self.assertEqual(len(Story.objects.published()), 2)
 
     def test_draft(self):
-        self.assertQuerysetEqual(Story.objects.draft(),
-                                 [f'<Story: {self.story2.name}>'])
+        draft_stories = Story.objects.draft()
+        expected_repr = [f'<Story: {self.story2.name}>']
+        self.assertQuerySetEqual(draft_stories, expected_repr, transform=repr)
 
     def test_featured(self):
         self.assertQuerysetEqual(Story.objects.featured(),
