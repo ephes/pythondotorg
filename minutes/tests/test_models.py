@@ -21,15 +21,17 @@ class MinutesModelTests(TestCase):
         )
 
     def test_draft(self):
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             Minutes.objects.draft(),
-            ['<Minutes: PSF Meeting Minutes January 01, 2013>']
+            ['<Minutes: PSF Meeting Minutes January 01, 2013>'],
+            transform=repr
         )
 
     def test_published(self):
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             Minutes.objects.published(),
-            ['<Minutes: PSF Meeting Minutes January 01, 2012>']
+            ['<Minutes: PSF Meeting Minutes January 01, 2012>'],
+            transform=repr
         )
 
     def test_date_methods(self):
