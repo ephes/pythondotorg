@@ -349,3 +349,6 @@ GLOBAL_SURROGATE_KEY = 'pydotorg-app'
 PYCON_API_KEY = config("PYCON_API_KEY", default="deadbeef-dead-beef-dead-beefdeadbeef")
 PYCON_API_SECRET = config("PYCON_API_SECRET", default="deadbeef-dead-beef-dead-beefdeadbeef")
 PYCON_API_HOST = config("PYCON_API_HOST", default="localhost:8000")
+
+### Default auto primary key field (Django 3.2)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
