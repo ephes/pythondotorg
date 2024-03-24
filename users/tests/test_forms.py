@@ -92,11 +92,13 @@ class UsersFormsTestCase(TestCase):
             'password2': 'password',
         })
         self.assertFalse(form.is_valid())
+        print("username form errors: ", str(form.errors['username'][0]))
         self.assertEqual(
             form.errors['username'],
             [
                 'Enter a valid username. This value may contain only '
-                'English letters, numbers, and @/./+/-/_ characters.'
+                'unaccented lowercase a-z and uppercase A-Z letters, '
+                'numbers, and @/./+/-/_ characters.'
             ]
         )
 
