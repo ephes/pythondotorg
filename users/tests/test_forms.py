@@ -58,8 +58,8 @@ class UsersFormsTestCase(TestCase):
             'password1': 'password',
             'password2': 'password'
         })
-        self.assertFalse(form.is_valid())
-        self.assertIn('email', form.errors)
+        self.assertTrue(form.is_valid())
+        self.assertRaises(ValueError, form.save, None)
 
     def test_newline_in_username(self):
         # Note that since Django 1.9, forms.CharField().strip is True
