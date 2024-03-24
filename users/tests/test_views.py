@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import TestCase
+from django.core import mail
 
 from sponsors.forms import SponsorUpdateForm, SponsorRequiredAssetsForm
 from sponsors.models import Sponsorship, RequiredTextAssetConfiguration, SponsorBenefit
@@ -230,7 +231,7 @@ class UsersViewsTestCase(TestCase):
             'password2': 'password',
         })
 
-    def test_user_duplicate_username_email(self):
+    def test_user_duplicate_username(self):
         post_data = {
             'username': 'thisusernamedoesntexist',
             'email': 'thereisnoemail@likesthis.com',
@@ -244,9 +245,23 @@ class UsersViewsTestCase(TestCase):
         self.assertContains(
             response, 'A user with that username already exists.'
         )
-        self.assertContains(
-            response, 'A user is already registered with this e-mail address.'
-        )
+
+    def test_user_duplicate_email(self):
+        post_data = {
+            'username': 'thisusernamedoesntexist',
+            'email': 'thereisnoemail@likesthis.com',  # duplicate email
+            'password1': 'password',
+            'password2': 'password',
+        }
+        self.assertUserCreated(data=post_data)
+        # make sure username is unique
+        post_data['username'] = 'thisusernamedoesntexist2'
+        post_data[settings.HONEYPOT_FIELD_NAME] = settings.HONEYPOT_VALUE
+        url = reverse('account_signup')
+        response = self.client.post(url, post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(mail.outbox[-1].subject, '[example.com] Account Already Exists')
 
     def test_usernames(self):
         url = reverse('account_signup')
