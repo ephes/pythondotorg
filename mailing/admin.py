@@ -1,10 +1,7 @@
 from django.contrib import admin
-from django.forms.models import modelform_factory
 from django.http import HttpResponse
 from django.urls import path
 from django.shortcuts import get_object_or_404
-
-from mailing.forms import BaseEmailTemplateForm
 
 
 class BaseEmailTemplateAdmin(admin.ModelAdmin):
@@ -24,10 +21,6 @@ class BaseEmailTemplateAdmin(admin.ModelAdmin):
             'fields': ('created_at', 'updated_at'),
         }),
     )
-
-    def get_form(self, *args, **kwargs):
-        kwargs["form"] = modelform_factory(self.model, form=BaseEmailTemplateForm)
-        return super().get_form(*args, **kwargs)
 
     def get_urls(self):
         urls = super().get_urls()

@@ -11,6 +11,8 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
+from django.template import Template, Context, TemplateSyntaxError
+
 
 from sponsors.models import (
     SponsorshipBenefit,
@@ -775,3 +777,19 @@ class CloneApplicationConfigForm(forms.Form):
                 raise forms.ValidationError(f"The year {target_year} already have a valid confguration.")
 
         return self.cleaned_data
+
+
+class SponsorEmailNotificationTemplateForm(forms.ModelForm):
+
+    def clean_content(self):
+        content = self.cleaned_data["content"]
+        try:
+            template = Template(content)
+            template.render(Context({}))
+            return content
+        except TemplateSyntaxError as e:
+            raise forms.ValidationError(e)
+
+    class Meta:
+        model = SponsorEmailNotificationTemplate
+        fields = "__all__"

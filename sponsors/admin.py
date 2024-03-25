@@ -9,7 +9,7 @@ from django.db.models import Subquery
 from django.template import Context, Template
 from django.contrib import admin
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.forms import ModelForm
+from django.forms import ModelForm, modelform_factory
 from django.urls import path, reverse, resolve
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe
@@ -23,7 +23,7 @@ from sponsors.models import *
 from sponsors.models.benefits import RequiredAssetMixin
 from sponsors import views_admin
 from sponsors.forms import SponsorshipReviewAdminForm, SponsorBenefitAdminInlineForm, RequiredImgAssetConfigurationForm, \
-    SponsorshipBenefitAdminForm, CloneApplicationConfigForm
+    SponsorshipBenefitAdminForm, CloneApplicationConfigForm, SponsorEmailNotificationTemplateForm
 from cms.admin import ContentManageableModelAdmin
 
 
@@ -950,6 +950,7 @@ class SponsorEmailNotificationTemplateAdmin(BaseEmailTemplateAdmin):
             "content": SPONSOR_TEMPLATE_HELP_TEXT,
         }
         kwargs.update({"help_texts": help_texts})
+        kwargs["form"] = SponsorEmailNotificationTemplateForm
         return super().get_form(request, obj, **kwargs)
 
 
