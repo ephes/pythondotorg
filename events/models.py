@@ -218,6 +218,13 @@ class Event(ContentManageable):
     def is_past(self):
         return self.next_time is None
 
+    def save(self, **kwargs):
+        # Also update the rendered description if the description has changed
+        if "description" in kwargs.get("update_fields", {}):
+            kwargs["update_fields"].add("_description_rendered")
+        return super().save(**kwargs)
+
+
 
 class RuleMixin:
     def valid_dt_end(self):
